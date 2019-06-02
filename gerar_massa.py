@@ -3,7 +3,8 @@ import numpy as np
 import random as rd
 import openpyxl
 from pip._vendor.msgpack.fallback import xrange
-
+from tratar_df import gerador_lista
+from gerador_aleatorio import gerador
 
 def cpf_funcional():
     n = [rd.randrange(10) for i in xrange(9)]
@@ -28,27 +29,19 @@ def cpf_funcional():
 if __name__ == '__main__':
     print("digite a quantidade da massa desejada")
     vezes = int(input())
-    input()
     vetor = []
     x = 0
     data = []
-    df_nome = pd.read_csv("TB_Nomes.csv", sep=",", engine='python')
-    df_nome.columns = ["Index", "Nomes", "sexo"]
-    df_nome = df_nome["Nomes"]
-    df_nome = df_nome.to_list()
-    df_sobrenome = pd.read_csv("sobrenome.csv", sep=",", engine='python')
-    df_sobrenome = df_sobrenome["sobrenomes"]
-    df_sobrenome = df_sobrenome.to_list()
-    df_email = pd.read_csv("email.csv", sep=",", engine='python')
-    df_email = df_email["email"]
-    df_email = df_email.to_list()
+    df_nome = gerador_lista(df_name=r"TB_Nomes.csv",coluna='nome',colunas=['index','nome','sexo']).manipular_df()
+    df_sobrenome = gerador_lista(df_name=r"sobrenome.csv",coluna='sobrenomes').manipular_df2()
+    df_email = gerador_lista(df_name=r"email.csv",coluna='email').manipular_df2()
     for i in range(0,vezes):
         nome = rd.choice(df_nome)
         sobrenome = rd.choice(df_sobrenome)
         email = rd.choice(df_email)
         email = f"{nome}{sobrenome}{email}".replace(" ","")
         vetor.append(nome + sobrenome)
-        vetor.append(cpf_funcional())
+        vetor.append(gerador().cpf_funcional())
         vetor.append(email)
         data.append(vetor)
         vetor = []
